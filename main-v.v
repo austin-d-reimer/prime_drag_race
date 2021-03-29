@@ -1,34 +1,51 @@
 import time
+import math
 
 fn main() {
-	maxnum := 100000000
-	mut rawbits := []bool{len: int((maxnum + 1) /2), init: true}
-
-	sq := time.new_stopwatch({})
-	for facter in 3..maxnum {
-		if get_odd(facter, rawbits) {
-			remove_bits(facter, mut rawbits, maxnum)
+	sw := time.new_stopwatch({})
+	mut results := []int{}
+	for {
+		results << run(1000000)
+		if sw.elapsed().seconds() > 5 {
+			break
 		}
 	}
+	println(results.len)
+
+
+
+	list_of_nums := [1000, 10000, 100000, 1000000, 10_000_000, 100_000_000]
+
+	for number in list_of_nums {
+		sw1 := time.new_stopwatch({})
+		result := run(number)
+		println("Got ${result} results in ${sw1.elapsed().seconds()}")
+	}
+}
+
+fn run(maxnum int) int {
+	mut rawbits := []bool{len: int((maxnum + 1) /2), init: true}
 	mut count := 0
+
+	for facter := 3; facter < math.sqrt(maxnum); facter += 2 {
+		for num in facter..maxnum {
+			if get_odd(num, rawbits) {
+				facter = num
+				break
+			}
+		}
+		for number := facter * 3; number < maxnum; number += facter * 2 {
+			rawbits[int(number /2)] = false
+		}
+
+	}
 	for bit in rawbits {
 		if bit {
 			count ++
 		}
 	}
-	println(count)
-	println('Fount ${count} prime numbers in ${sq.elapsed().seconds()}seconds')
 
-
-}
-fn remove_bit(index int,mut rawbits []bool) {
-	rawbits[int(index / 2)] = false
-}
-
-fn remove_bits(facter int, mut rawbits []bool, maxnum int) {
-	for number := facter * 3; number < maxnum; number += facter * 2 {
-		remove_bit(number, mut rawbits)
-	}
+	return count
 }
 
 fn get_odd(number int, rawbits []bool) bool {

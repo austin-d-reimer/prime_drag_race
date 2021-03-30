@@ -31,7 +31,7 @@ func run(maxnum int) int {
 	return count
 }
 
-func main() {
+func run_loop() {
 	max_numbers := []int{1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000}
 
 	for i := range max_numbers {
@@ -39,6 +39,27 @@ func main() {
 		fmt.Println(run(max_numbers[i]))
 		fmt.Println(time.Duration(starttime.Nanosecond()))
 	}
+}
+
+func run_timed() {
+	starttime := time.Now()
+	count := 0
+	result := 0
+	for {
+		result = run(1_000_000)
+		count++
+		if result != 78_498 {
+			fmt.Println(result, " Is not correct")
+		}
+		if time.Now().Second()-starttime.Second() > 5 {
+			break
+		}
+	}
+	println("Ran ", count, " times in 5 seconds their was ", result, "results")
+}
+
+func main() {
+	run_timed()
 	// fmt.Println(run(1000))
 
 }

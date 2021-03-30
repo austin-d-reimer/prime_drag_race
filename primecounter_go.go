@@ -55,7 +55,7 @@ func run_timed() {
 			break
 		}
 	}
-	println("Ran ", count, " times in 5 seconds their was ", result, "results")
+	fmt.Println("Ran ", count, " times in 5 seconds their was ", result, "results")
 }
 
 func main() {
